@@ -59,22 +59,28 @@ def _make_client() -> httpx.Client:
 # Parsing
 # ---------------------------------------------------------------------------
 def _extract_field(soup: BeautifulSoup, prefix: str) -> str:
-    """Return the value that follows `prefix` in any element's text."""
-    for el in soup.find_all(True):
-        if el.string and prefix in el.string:
-            return el.string.replace(prefix, "").strip()
-    for el in soup.find_all(["span", "div", "p", "td", "li"]):
-        text = el.get_text(strip=True)
-        if text.startswith(prefix):
-            return text[len(prefix):].strip()
+    """Return the value that follows `prefix` — matches real Brady div structure."""
+    for div in soup.find_all("div"):
+        text = div.get_text("\n", strip=True)
+        for line in text.splitlines():
+            line = line.strip()
+            if line.startswith(prefix):
+                return line[len(prefix):].strip()
     return ""
 
 
 def _parse_html(html: str, printer: dict) -> dict:
     soup = BeautifulSoup(html, "html.parser")
 
-    # Printer Model + Serial  (Brady: <h1 id="printer-title">i4311-PGi43112532102022</h1>)
-    title_el = soup.find(id="printer-title") or soup.find("h1")
+    # Printer Model + Serial
+    # Real Brady UI: <div id="printer-info"><h1>i4311-PGi43112532102022</h1>
+    # Mock/older UI:  <h1 id="printer-title">MODEL-SERIAL</h1>
+    printer_info = soup.find(id="printer-info")
+    title_el = (
+        (printer_info.find("h1") if printer_info else None)
+        or soup.find(id="printer-title")
+        or soup.find("h1")
+    )
     title_text = title_el.get_text(strip=True) if title_el else ""
 
     if "-" in title_text:
@@ -84,9 +90,14 @@ def _parse_html(html: str, printer: dict) -> dict:
         model  = title_text.strip() or printer.get("name", "Unknown")
         serial = printer.get("serial_number", "")
 
-    # Status  (Brady: <div id="printer-status"><p>Ready</p></div>)
+    # Status — real Brady UI: <div id="printer-status">...<p>Ready</p>...</div>
     status_el  = soup.find(id="printer-status")
-    status_raw = status_el.get_text(separator=" ", strip=True) if status_el else "Unknown"
+    if status_el:
+        # Prefer the first <p> or <span> inside, fall back to full text
+        inner = status_el.find(["p", "span", "div"])
+        status_raw = (inner.get_text(strip=True) if inner else status_el.get_text(separator=" ", strip=True))
+    else:
+        status_raw = "Unknown"
     status_raw = "".join(c for c in status_raw if c.isascii()).strip()
     status, css_class = _STATUS_MAP.get(status_raw.lower(), (status_raw or "Unknown", "status-warning"))
 

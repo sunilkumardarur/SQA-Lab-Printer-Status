@@ -29,7 +29,9 @@
       "PowerShell(Get-Process *)",
       "Bash(Remove-Item *)",
       "Bash(Get-ChildItem -Path \"D:\\\\AI Projects\\\\SQA Lab Printer Status\\\\backend\" -Recurse -Directory -ErrorAction SilentlyContinue)",
-      "Bash(Select-Object -ExpandProperty FullName)"
+      "Bash(Select-Object -ExpandProperty FullName)",
+      "Bash(Get-ChildItem -Path \"D:\\\\e2e_Webpage\\\\e2e_Webpage\" -Exclude \".venv\")",
+      "Bash(Select-Object -Property Name, PSIsContainer)"
     ]
   }
 }

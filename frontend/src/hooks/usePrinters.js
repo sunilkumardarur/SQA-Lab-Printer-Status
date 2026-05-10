@@ -24,6 +24,17 @@ export function usePrinters() {
   const add = useCallback(async (form) => {
     const printer = await api.addPrinter(form)
     setPrinters(prev => [...prev, printer])
+    // Poll until background refresh resolves the Pending status
+    const poll = async (attempts = 0) => {
+      if (attempts > 10) return
+      await new Promise(r => setTimeout(r, 1500))
+      try {
+        const updated = await api.refreshPrinter(printer.sl_no)
+        setPrinters(prev => prev.map(p => p.sl_no === printer.sl_no ? updated : p))
+        if (updated.status === 'Pending') poll(attempts + 1)
+      } catch { /* printer may have been deleted */ }
+    }
+    poll()
     return printer
   }, [])
 
