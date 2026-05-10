@@ -135,7 +135,10 @@ source .venv/bin/activate        # Linux/macOS
 # .venv\Scripts\Activate.ps1    # Windows
 
 pip install -r requirements.txt
+playwright install chromium
 ```
+
+> `playwright install chromium` downloads the headless Chromium browser (~170MB) used to fetch printer status pages. This is a one-time step per machine.
 
 ### 2. Configure the app
 
