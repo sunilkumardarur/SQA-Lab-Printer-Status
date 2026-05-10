@@ -1,0 +1,35 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(Set-ExecutionPolicy *)",
+      "PowerShell(pip list *)",
+      "Bash(Get-ChildItem -Path \"D:\\\\AI Projects\\\\SQA Lab Printer Status\" -Recurse)",
+      "Bash(Select-Object -Property FullName, PSIsContainer)",
+      "Bash(Sort-Object FullName)",
+      "PowerShell(pip show *)",
+      "PowerShell(& \"D:\\\\AI Projects\\\\SQA Lab Printer Status\\\\.venv\\\\Scripts\\\\pip.exe\" install -r \"D:\\\\AI Projects\\\\SQA Lab Printer Status\\\\requirements.txt\" 2>&1 | Select-Object -Last 15)",
+      "PowerShell(& \"D:\\\\AI Projects\\\\SQA Lab Printer Status\\\\.venv\\\\Scripts\\\\pip.exe\" install -r \"D:\\\\AI Projects\\\\SQA Lab Printer Status\\\\requirements.txt\" 2>&1)",
+      "PowerShell(& \"D:\\\\AI Projects\\\\SQA Lab Printer Status\\\\.venv\\\\Scripts\\\\pip.exe\" install fastapi uvicorn[standard] pydantic httpx beautifulsoup4 pyyaml filelock 2>&1 | Select-Object -Last 20)",
+      "PowerShell(& \"D:\\\\AI Projects\\\\SQA Lab Printer Status\\\\.venv\\\\Scripts\\\\python.exe\" -m pip install filelock pyyaml 2>&1)",
+      "PowerShell(where.exe python; python -c \"import sys; print\\(sys.version, sys.executable\\)\")",
+      "PowerShell(py *)",
+      "PowerShell(Remove-Item *)",
+      "PowerShell(& \"D:\\\\AI Projects\\\\SQA Lab Printer Status\\\\.venv\\\\Scripts\\\\python.exe\" --version 2>&1)",
+      "PowerShell(& \"D:\\\\AI Projects\\\\SQA Lab Printer Status\\\\.venv\\\\Scripts\\\\pip.exe\" install \"fastapi>=0.115\" \"uvicorn[standard]>=0.32\" \"httpx>=0.28\" \"beautifulsoup4>=4.12\" \"pyyaml>=6.0\" \"filelock>=3.16\" 2>&1 | Select-Object -Last 15)",
+      "PowerShell(cd \"D:\\\\AI Projects\\\\SQA Lab Printer Status\"; Start-Process -FilePath \".venv\\\\Scripts\\\\python.exe\" -ArgumentList \"main.py\" -NoNewWindow -PassThru; Start-Sleep -Seconds 3; try { $r = Invoke-RestMethod \"http://localhost:8000/health\" -TimeoutSec 5; $r | ConvertTo-Json } catch { $_.Exception.Message })",
+      "PowerShell(Stop-Process *)",
+      "Bash(Get-ChildItem -Path \"D:\\\\AI Projects\\\\SQA Lab Printer Status\" -Recurse -Include \"*notif*\", \"*email*\", \"*mail*\" -ErrorAction SilentlyContinue)",
+      "Bash(Select-Object FullName)",
+      "Bash(.venv/Scripts/pip.exe install *)",
+      "Bash(.venv/Scripts/python.exe -c \"import bcrypt; h = bcrypt.hashpw\\(b'AyanAarav', bcrypt.gensalt\\(\\)\\).decode\\(\\); print\\(h\\)\")",
+      "Bash(.venv/Scripts/python.exe -c \"from backend.main import app; print\\('Backend imports OK'\\)\")",
+      "Bash(npm run *)",
+      "Bash(Copy-Item \"C:\\\\Users\\\\sunil\\\\.claude\\\\image-cache\\\\c832866f-7ea3-49ee-ac37-79919c5d1eeb\\\\1.jpeg\" \"D:\\\\AI Projects\\\\SQA Lab Printer Status\\\\frontend\\\\public\\\\brady_logo.png\" -Force)",
+      "Bash(Write-Host \"Done\")",
+      "PowerShell(Get-Process *)",
+      "Bash(Remove-Item *)",
+      "Bash(Get-ChildItem -Path \"D:\\\\AI Projects\\\\SQA Lab Printer Status\\\\backend\" -Recurse -Directory -ErrorAction SilentlyContinue)",
+      "Bash(Select-Object -ExpandProperty FullName)"
+    ]
+  }
+}

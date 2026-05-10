@@ -1,0 +1,25 @@
+app:
+  title: "SQA Lab Printer Status"
+  host: "0.0.0.0"
+  port: 8000
+  debug: false
+  log_level: "INFO"
+
+mock:
+  enabled: false  # Set to false when real printers are available
+  simulate_delay: 1.0  # Seconds to simulate network latency
+
+printer:
+  connection_timeout: 5       # Seconds before giving up on HTTP connect
+  read_timeout: 10            # Seconds to wait for printer page response
+  refresh_workers: 10         # Max parallel threads for bulk refresh
+  default_port: 9100          # Default printer port
+
+storage:
+  data_file: "data/printers.yaml"
+  notifications_file: "data/notifications.yaml"
+  lock_timeout: 10            # Seconds to wait for file lock
+
+admin:
+  # bcrypt hash of the admin password — do not share or commit plaintext password
+  password_hash: "$2b$12$ZSTyNlbZcP6rWT4Sj1cx..bLFY4sTHsNjeiU76H9fT5VsYTvUrCL6"

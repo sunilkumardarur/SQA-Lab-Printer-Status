@@ -1,0 +1,32 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    @apply bg-gray-50 text-gray-900;
+  }
+}
+
+@layer components {
+  /* Status badges — richer pill with icon */
+  .status-badge {
+    @apply inline-flex items-start px-2 py-1 rounded-lg text-xs font-semibold border leading-tight;
+    white-space: normal;
+    word-break: break-word;
+  }
+  .status-ready    { @apply bg-green-50  text-green-700  border-green-200; }
+  .status-error    { @apply bg-red-50    text-red-700    border-red-200; }
+  .status-warning  { @apply bg-amber-50  text-amber-700  border-amber-200; }
+  .status-mismatch { @apply bg-blue-50   text-blue-700   border-blue-200; }
+  .status-pending  { @apply bg-gray-100  text-gray-500   border-gray-200; }
+
+  /* Availability badges */
+  .avail-badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-semibold;
+  }
+  .avail-available   { @apply bg-emerald-100 text-emerald-800; }
+  .avail-inuse       { @apply bg-orange-100  text-orange-800; }
+  .avail-unavailable { @apply bg-red-100     text-red-700; }
+}
