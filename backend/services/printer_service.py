@@ -55,6 +55,20 @@ def _make_client() -> httpx.Client:
     return httpx.Client(timeout=(_TIMEOUT, _READ_TIMEOUT), follow_redirects=True)
 
 
+def _fetch_html_real(ip: str) -> str:
+    from playwright.sync_api import sync_playwright
+    url = f"http://{ip}/"
+    with sync_playwright() as p:
+        browser = p.chromium.launch(headless=True)
+        try:
+            page = browser.new_page()
+            page.goto(url, timeout=15000, wait_until="networkidle")
+            page.wait_for_selector('#printer-info h1', timeout=10000)
+            return page.content()
+        finally:
+            browser.close()
+
+
 # ---------------------------------------------------------------------------
 # Parsing
 # ---------------------------------------------------------------------------
@@ -126,13 +140,17 @@ def _parse_html(html: str, printer: dict) -> dict:
 # Public API
 # ---------------------------------------------------------------------------
 def _fetch_printer(printer: dict) -> dict:
-    """Fetch http://<ip>/ and parse. Works for mock and real."""
-    url = f"http://{printer['ip_address']}/"
+    """Fetch http://<ip>/ and parse. Mock uses httpx, real uses Playwright."""
     try:
-        with _make_client() as client:
-            resp = client.get(url)
-            resp.raise_for_status()
-            return _parse_html(resp.text, printer)
+        if _MOCK:
+            url = f"http://{printer['ip_address']}/"
+            with _make_client() as client:
+                resp = client.get(url)
+                resp.raise_for_status()
+                html = resp.text
+        else:
+            html = _fetch_html_real(printer['ip_address'])
+        return _parse_html(html, printer)
     except (httpx.ConnectError, httpx.ConnectTimeout, ConnectionRefusedError):
         return {
             "status":       "Unreachable",
@@ -140,9 +158,15 @@ def _fetch_printer(printer: dict) -> dict:
             "availability": "Not Available",
             "reserved_by":  "",
         }
-    except httpx.TimeoutException:
-        return {"status": "Timeout", "css_class": "status-error"}
-    except Exception:
+    except Exception as e:
+        err = str(e).lower()
+        if any(x in err for x in ["timeout", "net::err", "connection", "unreachable"]):
+            return {
+                "status":       "Unreachable",
+                "css_class":    "status-error",
+                "availability": "Not Available",
+                "reserved_by":  "",
+            }
         return {"status": "Error", "css_class": "status-error"}
 
 
