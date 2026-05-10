@@ -56,14 +56,15 @@ def _make_client() -> httpx.Client:
 
 
 def _fetch_html_real(ip: str) -> str:
-    from playwright.sync_api import sync_playwright
+    from playwright.sync_api import sync_playwright  # noqa: PLC0415
     url = f"http://{ip}/"
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
         try:
             page = browser.new_page()
-            page.goto(url, timeout=15000, wait_until="networkidle")
-            page.wait_for_selector('#printer-info h1', timeout=10000)
+            page.goto(url, timeout=20000, wait_until="domcontentloaded")
+            page.wait_for_selector('#printer-status p', timeout=15000)
+            page.wait_for_selector('#printer-info', timeout=5000)
             return page.content()
         finally:
             browser.close()

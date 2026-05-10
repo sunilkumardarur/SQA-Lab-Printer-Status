@@ -32,7 +32,6 @@ export default function DeletePrinterModal({ printer, onPasswordDelete, onNotify
     setLoading(true)
     setError('')
     try {
-      localStorage.setItem('sqalab_username', yourName.trim())
       await onNotifyDelete(printer, yourName.trim())
       setDone(true)
     } catch (ex) {

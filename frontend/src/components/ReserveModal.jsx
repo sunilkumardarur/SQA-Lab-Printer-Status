@@ -2,8 +2,7 @@ import { useState } from 'react'
 import { X, Lock } from 'lucide-react'
 
 export default function ReserveModal({ printer, onReserve, onClose }) {
-  const saved = localStorage.getItem('sqalab_username') ?? ''
-  const [user, setUser] = useState(saved)
+  const [user, setUser] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
 
@@ -12,7 +11,6 @@ export default function ReserveModal({ printer, onReserve, onClose }) {
     if (!user.trim()) { setError('Please enter your name.'); return }
     setLoading(true)
     try {
-      localStorage.setItem('sqalab_username', user.trim())
       await onReserve(printer.sl_no, user.trim())
       onClose()
     } catch (ex) {
